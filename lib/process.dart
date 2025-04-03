@@ -1,6 +1,6 @@
 class CpuProcess {
-  final int timeToComplete;
-  final int enterTime;
+  int timeToComplete;
+  int enterTime;
 
   int remainingTime = 0;
 
