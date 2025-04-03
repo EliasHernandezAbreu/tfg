@@ -1,5 +1,5 @@
 enum AppPage {
-    home,
-    planning,
-    replacement,
+  home,
+  planning,
+  replacement,
 }
