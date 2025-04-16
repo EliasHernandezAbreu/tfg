@@ -1,5 +1,5 @@
-import 'package:tfg/planning_state.dart';
+import 'package:tfg/planning_context.dart';
 
 abstract class PlanningAlgorithm {
-  PlanningState nextState(PlanningState oldState);
+  PlanningContext nextState(PlanningContext oldState);
 }

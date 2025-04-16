@@ -1,10 +1,10 @@
 import 'package:tfg/planning_algorithm.dart';
-import 'package:tfg/planning_state.dart';
+import 'package:tfg/planning_context.dart';
 
 class PlanningFifo extends PlanningAlgorithm {
   @override
-  PlanningState nextState(PlanningState oldState) {
-    PlanningState newState = PlanningState.from(oldState);
+  PlanningContext nextState(PlanningContext oldState) {
+    PlanningContext newState = PlanningContext.from(oldState);
     newState.tickTime();
     if (newState.ready.isEmpty || newState.currentProcess != null) return newState;
     newState.moveToCpu(newState.ready.first);

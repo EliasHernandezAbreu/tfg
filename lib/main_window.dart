@@ -15,9 +15,11 @@ class MainWindow extends StatefulWidget {
 
 class _MainWindowState extends State<MainWindow> {
   AppPage _appPage = AppPage.home;
-  void setAppPage(AppPage newPage) {
+
+  void setAppPage(AppPage newPage, BuildContext context) {
     setState(() {
       _appPage = newPage;
+      Navigator.pop(context);
     });
   }
 
@@ -33,15 +35,15 @@ class _MainWindowState extends State<MainWindow> {
             const DrawerHeader(child: Text('SimOS')),
             ListTile(
               title: const Text('Home'),
-              onTap: () { setAppPage(AppPage.home); },
+              onTap: () { setAppPage(AppPage.home, context); },
             ),
             ListTile(
               title: const Text('Process planning'),
-              onTap: () { setAppPage(AppPage.planning); },
+              onTap: () { setAppPage(AppPage.planning, context); },
             ),
             ListTile(
               title: const Text('Page replacement'),
-              onTap: () { setAppPage(AppPage.replacement); },
+              onTap: () { setAppPage(AppPage.replacement, context); },
             )
           ],
         ),

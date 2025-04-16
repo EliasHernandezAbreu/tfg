@@ -1,4 +1,5 @@
 class CpuProcess {
+  int? key;
   int timeToComplete;
   int enterTime;
 

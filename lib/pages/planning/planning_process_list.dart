@@ -1,42 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tfg/process.dart';
+import 'package:tfg/cpu_process.dart';
 
-class PlanningProcessList extends StatefulWidget {
-  const PlanningProcessList({super.key});
+class PlanningProcessList extends StatelessWidget {
+  final List<CpuProcess> processes;
+  final Function() addProcess;
+  final Function(int index) removeProcess;
+  final Function(int index, int value) changeProcessEnterTime;
+  final Function(int index, int value) changeProcessTimeToComplete;
 
-  @override
-  State<StatefulWidget> createState() {
-    return _PlanningProcessListState();
-  }
-}
-
-class _PlanningProcessListState extends State<PlanningProcessList> {
-  final List<CpuProcess> _processes = [CpuProcess(0, 1)];
-
-  void removeProcess(int index) {
-    if (_processes.length <= 1) return;
-    setState(() {
-      _processes.removeAt(index);
-    });
-  }
-
-  void addProcess() {
-    setState(() {
-      _processes.add(CpuProcess(0, 1));
-    });
-  }
-
-  void changeProcessEnterTime(int index, int value) {
-    setState(() {
-      _processes[index].enterTime = value;
-    });
-  }
-  void changeProcessTimeToComplete(int index, int value) {
-    setState(() {
-      _processes[index].timeToComplete = value;
-    });
-  }
+  const PlanningProcessList({
+    super.key,
+    required this.processes,
+    required this.addProcess,
+    required this.removeProcess,
+    required this.changeProcessEnterTime,
+    required this.changeProcessTimeToComplete,
+  });
 
   TableRow processRow((int, CpuProcess) pair) {
     int index = pair.$1;
@@ -105,11 +85,10 @@ class _PlanningProcessListState extends State<PlanningProcessList> {
           },
           children: [
             header(),
-            ..._processes.indexed.map(processRow),
+            ...processes.indexed.map(processRow),
           ]
         ),
       ],
     );
   }
 }
-
