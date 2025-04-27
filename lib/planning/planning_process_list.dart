@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tfg/cpu_process.dart';
+import 'package:tfg/planning/cpu_process.dart';
 
 class PlanningProcessList extends StatelessWidget {
   final List<CpuProcess> processes;

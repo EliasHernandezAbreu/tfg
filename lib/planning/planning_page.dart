@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tfg/cpu_process.dart';
+import 'package:tfg/planning/cpu_process.dart';
 import 'package:tfg/planning/algorithms/planning_fifo.dart';
 import 'package:tfg/planning/planning_algorithm.dart';
 import 'package:tfg/planning/planning_context.dart';

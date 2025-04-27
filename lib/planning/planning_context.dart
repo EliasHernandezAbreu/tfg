@@ -1,4 +1,4 @@
-import 'package:tfg/cpu_process.dart';
+import 'package:tfg/planning/cpu_process.dart';
 
 class PlanningContext {
   int currentTime = 0;
