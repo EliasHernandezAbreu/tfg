@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tfg/app_page.dart';
-import 'package:tfg/pages/home_page.dart';
-import 'package:tfg/pages/planning_page.dart';
-import 'package:tfg/pages/replacement_page.dart';
+import 'package:tfg/home_page.dart';
+import 'package:tfg/planning/planning_page.dart';
+import 'package:tfg/replacement/replacement_page.dart';
 
 class MainWindow extends StatefulWidget {
   const MainWindow({super.key});

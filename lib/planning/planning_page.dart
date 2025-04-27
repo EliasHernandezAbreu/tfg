@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tfg/pages/planning/planning_process_list.dart';
-import 'package:tfg/pages/planning/planning_simulation.dart';
-import 'package:tfg/planning_algorithm.dart';
-import 'package:tfg/planning_algorithms/planning_fifo.dart';
-import 'package:tfg/planning_context.dart';
 import 'package:tfg/cpu_process.dart';
+import 'package:tfg/planning/algorithms/planning_fifo.dart';
+import 'package:tfg/planning/planning_algorithm.dart';
+import 'package:tfg/planning/planning_context.dart';
+import 'package:tfg/planning/planning_process_list.dart';
+import 'package:tfg/planning/planning_simulation.dart';
 
 class PlanningPage extends StatefulWidget {
   const PlanningPage({super.key});
@@ -18,8 +18,8 @@ class PlanningPage extends StatefulWidget {
 class _PlanningPageState extends State<PlanningPage> {
   int pageSimulationStep = 0;
   PlanningContext _context = PlanningContext([]);
+  PlanningAlgorithm _algorithm = PlanningFifo();
   final List<CpuProcess> _processes = [CpuProcess(0, 1)];
-  final PlanningAlgorithm _algorithm = PlanningFifo();
 
   void removeProcess(int index) {
     if (_processes.length <= 1) return;
@@ -64,6 +64,12 @@ class _PlanningPageState extends State<PlanningPage> {
     });
   }
 
+  void changeAlgorithm(PlanningAlgorithm newAlgorithm) {
+    setState(() {
+      _algorithm = newAlgorithm;
+    });
+  }
+
   Widget getFloatingButton() {
     if (pageSimulationStep == 0) {
       return FloatingActionButton.extended(
@@ -100,6 +106,7 @@ class _PlanningPageState extends State<PlanningPage> {
         algorithm: _algorithm,
         planningContext: _context,
         simulationStep: tickTime,
+        changeAlgorithm: changeAlgorithm,
       );
     } else {
       return const Text("You're not supposed to be here btw");

@@ -56,6 +56,9 @@ class PlanningContext {
   bool moveToCpu(CpuProcess process) {
     if (!ready.contains(process)) return false;
     ready.remove(process);
+    if (currentProcess != null) {
+      ready.add(currentProcess!);
+    }
     currentProcess = process;
     return true;
   }
