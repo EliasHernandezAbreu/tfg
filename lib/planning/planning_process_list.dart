@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tfg/custom/number_input.dart';
 import 'package:tfg/planning/cpu_process.dart';
 
 class PlanningProcessList extends StatelessWidget {
@@ -35,19 +36,13 @@ class PlanningProcessList extends StatelessWidget {
           ),
         ),
         Text(index.toString(), textAlign: TextAlign.center),
-        TextFormField(
-          textAlign: TextAlign.center,
-          keyboardType: TextInputType.number,
-          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          initialValue: process.enterTime.toString(),
-          onChanged: (value) { changeProcessEnterTime(index, int.parse(value)); },
+        NumberInput(
+          onChanged: (value) { changeProcessEnterTime(index, value); },
+          initialValue: process.enterTime,
         ),
-        TextFormField(
-          textAlign: TextAlign.center,
-          keyboardType: TextInputType.number,
-          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          initialValue: process.timeToComplete.toString(),
-          onChanged: (value) { changeProcessTimeToComplete(index, int.parse(value)); },
+        NumberInput(
+          onChanged: (value) { changeProcessTimeToComplete(index, value); },
+          initialValue: process.timeToComplete,
         ),
       ]
     );

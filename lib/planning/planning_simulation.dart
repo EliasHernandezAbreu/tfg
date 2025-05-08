@@ -44,34 +44,44 @@ class PlanningSimulation extends StatelessWidget {
             borderRadius: const BorderRadius.all(Radius.circular(8)),
             border: Border.all(width: 4, color: Colors.black38),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              LabeledColumn(label: "Pending enter", children: [
-                ...planningContext.pendingEnter.map((p) {
-                  return NamedBox(p.key.toString(), p.remainingTime.toString());
-                })
-              ]),
-              LabeledColumn(label: "Ready", children: [
-                ...planningContext.ready.map((p) {
-                  return NamedBox(p.key.toString(), p.remainingTime.toString());
-                })
-              ]),
-              const SizedBox(width: 5),
-              LabeledColumn(label: "Executing", children: planningContext.hasCurrentProcess()
-                ? [ NamedBox(
-                    planningContext.currentProcess!.key.toString(),
-                    planningContext.currentProcess!.remainingTime.toString(),
-                  ) ]
-                : [],
+              Text(
+                "Time: ${planningContext.currentTime}",
+                style: const TextStyle(fontWeight: FontWeight.bold) 
               ),
-              const SizedBox(width: 5),
-              LabeledColumn(label: "Completed", children: [
-                ...planningContext.completed.map((p) {
-                  return NamedBox(p.key.toString(), p.remainingTime.toString());
-                })
-              ]),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  LabeledColumn(label: "Pending enter", children: [
+                    ...planningContext.pendingEnter.map((p) {
+                      return NamedBox(p.key.toString(), p.remainingTime.toString());
+                    })
+                  ]),
+                  LabeledColumn(label: "Ready", children: [
+                    ...planningContext.ready.map((p) {
+                      return NamedBox(p.key.toString(), p.remainingTime.toString());
+                    })
+                  ]),
+                  const SizedBox(width: 5),
+                  LabeledColumn(label: "Executing", children: planningContext.hasCurrentProcess()
+                    ? [ NamedBox(
+                        planningContext.currentProcess!.key.toString(),
+                        planningContext.currentProcess!.remainingTime.toString(),
+                      ) ]
+                    : [],
+                  ),
+                  const SizedBox(width: 5),
+                  LabeledColumn(label: "Completed", children: [
+                    ...planningContext.completed.map((p) {
+                      return NamedBox(p.key.toString(), p.remainingTime.toString());
+                    })
+                  ]),
+                ],
+              ),
             ],
           ),
         ),

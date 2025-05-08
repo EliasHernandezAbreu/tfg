@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:tfg/app_page.dart';
 import 'package:tfg/home_page.dart';
@@ -27,14 +29,34 @@ class _MainWindowState extends State<MainWindow> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('SimOS'),
+        title: Row(
+          children: [
+            const Text("SimOS"),
+            const SizedBox(width: 20),
+            Image.file(
+              File("assets/logo.png"),
+              height: 40,
+            )
+          ],
+        )
       ),
       drawer: Drawer(
         child: ListView(
           children: [
-            const DrawerHeader(child: Text('SimOS')),
+            DrawerHeader(
+              child: Column(
+                children: [
+                  const Text('SimOS'),
+                  Image.file(
+                    File("assets/logo.png"),
+                    color: Colors.black,
+                    width: 100,
+                  )
+                ],
+              )
+            ),
             ListTile(
-              title: const Text('Home'),
+              title: const Text("Home"),
               onTap: () { setAppPage(AppPage.home, context); },
             ),
             ListTile(
