@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 class NumberInput extends StatelessWidget {
   final int initialValue;
+  final int minValue;
   final void Function(int newValue) onChanged;
 
   final TextEditingController controller = TextEditingController();
@@ -11,10 +12,10 @@ class NumberInput extends StatelessWidget {
     super.key,
     required this.onChanged,
     this.initialValue = 0,
+    this.minValue = 0,
   }) {
     controller.text = initialValue.toString();
     controller.selection = TextSelection.collapsed(offset: controller.text.length);
-    print(controller.text);
   }
 
   void selectAllText() {
@@ -25,9 +26,19 @@ class NumberInput extends StatelessWidget {
   }
 
   void handleChange(String newValue) {
+    if (newValue.isEmpty) {
+      controller.text = "0";
+      selectAllText();
+      return;
+    }
     int? numValue = int.tryParse(newValue);
     if (numValue == null) {
       controller.text = initialValue.toString();
+      return;
+    }
+    if (numValue < minValue && minValue != initialValue) {
+      controller.text = minValue.toString();
+      onChanged(minValue);
       return;
     }
     controller.text = numValue.toString();

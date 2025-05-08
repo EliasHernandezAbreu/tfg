@@ -43,6 +43,7 @@ class PlanningProcessList extends StatelessWidget {
         NumberInput(
           onChanged: (value) { changeProcessTimeToComplete(index, value); },
           initialValue: process.timeToComplete,
+          minValue: 1,
         ),
       ]
     );
