@@ -25,5 +25,5 @@ abstract class GlobalState {
     ("MRU", ReplacementMru(), "Most recently used"),
     ("Op", ReplacementOp(), "Optimal"),
   ];
-  static int currentReplacementAlgorithm = 0; // As index of planning algorithms
+  static int currentReplacementAlgorithm = 0; // As index of replacement algorithms
 }
