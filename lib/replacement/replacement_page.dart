@@ -13,7 +13,7 @@ class ReplacementPage extends StatefulWidget {
 }
 
 class _ReplacementPageState extends State<ReplacementPage> {
-  int _pageFrames = 1;
+  // int _pageFrames = 1;
   final ReplacementAlgorithm _algorithm = ReplacementFifo();
   ReplacementContext _context = ReplacementContext(4);
 

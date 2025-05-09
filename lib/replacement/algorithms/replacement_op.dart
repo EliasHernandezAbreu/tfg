@@ -1,7 +1,7 @@
 import 'package:tfg/replacement/replacement_algorithm.dart';
 import 'package:tfg/replacement/replacement_context.dart';
 
-class ReplacementMru extends ReplacementAlgorithm {
+class ReplacementOp extends ReplacementAlgorithm {
   @override
   ReplacementContext nextState(ReplacementContext oldState, int newPage) {
     ReplacementContext newState = ReplacementContext.from(oldState);

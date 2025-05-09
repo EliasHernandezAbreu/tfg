@@ -1,23 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:tfg/custom/number_input.dart';
+import 'package:tfg/global_state.dart';
 import 'package:tfg/planning/cpu_process.dart';
 
-class PlanningProcessList extends StatelessWidget {
-  final List<CpuProcess> processes;
-  final Function() addProcess;
-  final Function(int index) removeProcess;
-  final Function(int index, int value) changeProcessEnterTime;
-  final Function(int index, int value) changeProcessTimeToComplete;
-
+class PlanningProcessList extends StatefulWidget {
   const PlanningProcessList({
     super.key,
-    required this.processes,
-    required this.addProcess,
-    required this.removeProcess,
-    required this.changeProcessEnterTime,
-    required this.changeProcessTimeToComplete,
   });
+
+  @override
+  State<StatefulWidget> createState() => _PlanningProcessList();
+}
+
+class _PlanningProcessList extends State<PlanningProcessList> {
+  void removeProcess(int index) {
+    if (GlobalState.processes.length <= 1) return;
+    setState(() {
+      GlobalState.processes.removeAt(index);
+    });
+  }
+
+  void addProcess() {
+    setState(() {
+      GlobalState.processes.add(CpuProcess(0, 1));
+    });
+  }
+
+  void changeProcessEnterTime(int index, int value) {
+    setState(() {
+      GlobalState.processes[index].enterTime = value;
+    });
+  }
+  void changeProcessTimeToComplete(int index, int value) {
+    setState(() {
+      GlobalState.processes[index].timeToComplete = value;
+    });
+  }
 
   TableRow processRow((int, CpuProcess) pair) {
     int index = pair.$1;
@@ -70,19 +88,26 @@ class PlanningProcessList extends StatelessWidget {
             Text('Processes'),
           ],
         ),
-        Table(
-          border: const TableBorder(
-            horizontalInside: BorderSide(),
-          ),
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          columnWidths: const {
-            0: FixedColumnWidth(64),
-            1: FixedColumnWidth(64),
-          },
-          children: [
-            header(),
-            ...processes.indexed.map(processRow),
-          ]
+        Expanded(
+          child: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(),
+              child: Table(
+                border: const TableBorder(
+                  horizontalInside: BorderSide(),
+                ),
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                columnWidths: const {
+                  0: FixedColumnWidth(64),
+                  1: FixedColumnWidth(64),
+                },
+                children: [
+                  header(),
+                  ...GlobalState.processes.indexed.map(processRow),
+                ]
+              ),
+            ),
+          )
         ),
       ],
     );

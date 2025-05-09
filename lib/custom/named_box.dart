@@ -5,9 +5,9 @@ class NamedBox extends StatelessWidget {
   final String label;
 
   const NamedBox(
-    this.name,
-    this.label,
     {
+      required this.name,
+      required this.label,
       super.key,
     }
   );

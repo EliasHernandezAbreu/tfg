@@ -1,7 +1,7 @@
 import 'package:tfg/planning/cpu_process.dart';
 
 class PlanningContext {
-  int currentTime = 0;
+  int currentTime = -1;
   CpuProcess? currentProcess;
   List<CpuProcess> pendingEnter = [];
   List<CpuProcess> ready = [];
@@ -31,15 +31,9 @@ class PlanningContext {
     completed = List.from(oldState.completed);
   }
 
+  // Updates time and adds ready processes to the list
   void tickTime() {
     currentTime += 1;
-    if (currentProcess != null) {
-      currentProcess?.remainingTime -= 1;
-      if (currentProcess!.remainingTime <= 0) {
-        completed.add(currentProcess!);
-        currentProcess = null;
-      }
-    }
     List<CpuProcess> nextPendingEnter = List<CpuProcess>.from(pendingEnter);
     for (CpuProcess process in pendingEnter) {
       if (process.enterTime > currentTime) continue;
@@ -47,6 +41,16 @@ class PlanningContext {
       ready.add(process);
     }
     pendingEnter = nextPendingEnter;
+  }
+
+  // Handles reducing the remaining time of the process in the CPU
+  void burstCpu() {
+    if (currentProcess == null) return;
+    currentProcess?.remainingTime -= 1;
+    if (currentProcess!.remainingTime <= 0) {
+      completed.add(currentProcess!);
+      currentProcess = null;
+    }
   }
 
   bool hasCurrentProcess() {

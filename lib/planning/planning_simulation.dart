@@ -1,96 +1,119 @@
 import 'package:flutter/material.dart';
 import 'package:tfg/custom/labeled_column.dart';
 import 'package:tfg/custom/named_box.dart';
-import 'package:tfg/planning/algorithms/planning_fifo.dart';
-import 'package:tfg/planning/algorithms/planning_sjf.dart';
-import 'package:tfg/planning/planning_algorithm.dart';
+import 'package:tfg/global_state.dart';
 import 'package:tfg/planning/planning_context.dart';
 
-class PlanningSimulation extends StatelessWidget {
-  final PlanningAlgorithm algorithm;
-  final PlanningContext planningContext;
-  final void Function(PlanningAlgorithm) changeAlgorithm;
-  final Function() simulationStep;
-
+class PlanningSimulation extends StatefulWidget {
   const PlanningSimulation({
     super.key,
-    required this.algorithm,
-    required this.planningContext,
-    required this.changeAlgorithm,
-    required this.simulationStep,
   });
 
-  void changeAlgorithmIndex(int index) {
-    switch (index) {
-      case 0: 
-        changeAlgorithm(PlanningFifo());
-        break;
-      case 1: 
-        changeAlgorithm(PlanningSjf());
-        break;
-    }
-    return;
+  @override
+  State<StatefulWidget> createState() => _PlanningSimulation();
+}
+
+class _PlanningSimulation extends State<PlanningSimulation> {
+  PlanningContext planningContext = PlanningContext(GlobalState.processes);
+
+  void handleDropdownSelected(int? index) {
+    setState(() {
+      GlobalState.currentPlanningAlgorithm = index!;
+    });
+  }
+
+  void simulationStep() {
+    setState(() {
+      var currAlgo = GlobalState.planningAlgorithms[GlobalState.currentPlanningAlgorithm].$2;
+      planningContext = currAlgo.nextState(planningContext);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          margin: const EdgeInsets.only(bottom: 16),
-          decoration: BoxDecoration(
-            color: Colors.black26,
-            borderRadius: const BorderRadius.all(Radius.circular(8)),
-            border: Border.all(width: 4, color: Colors.black38),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Time: ${planningContext.currentTime}",
-                style: const TextStyle(fontWeight: FontWeight.bold) 
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            margin: const EdgeInsets.only(bottom: 16),
+            decoration: BoxDecoration(
+              color: Colors.black26,
+              borderRadius: const BorderRadius.all(Radius.circular(8)),
+              border: Border.all(width: 4, color: Colors.black38),
+            ),
+            child: Container(
+              decoration: const BoxDecoration(),
+              clipBehavior: Clip.hardEdge,
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  LabeledColumn(label: "Pending enter", children: [
-                    ...planningContext.pendingEnter.map((p) {
-                      return NamedBox(p.key.toString(), p.remainingTime.toString());
-                    })
-                  ]),
-                  LabeledColumn(label: "Ready", children: [
-                    ...planningContext.ready.map((p) {
-                      return NamedBox(p.key.toString(), p.remainingTime.toString());
-                    })
-                  ]),
-                  const SizedBox(width: 5),
-                  LabeledColumn(label: "Executing", children: planningContext.hasCurrentProcess()
-                    ? [ NamedBox(
-                        planningContext.currentProcess!.key.toString(),
-                        planningContext.currentProcess!.remainingTime.toString(),
-                      ) ]
-                    : [],
+                  Text(
+                    "Time: ${planningContext.currentTime < 0 ? "NOT STARTED" : planningContext.currentTime}",
+                    style: const TextStyle(fontWeight: FontWeight.bold) 
                   ),
-                  const SizedBox(width: 5),
-                  LabeledColumn(label: "Completed", children: [
-                    ...planningContext.completed.map((p) {
-                      return NamedBox(p.key.toString(), p.remainingTime.toString());
-                    })
-                  ]),
+                  const SizedBox(height: 20),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          LabeledColumn(label: "Pending enter", children: [
+                            ...planningContext.pendingEnter.map((p) {
+                              return NamedBox(
+                                name: p.key.toString(),
+                                label: p.remainingTime.toString(),
+                                key: Key(p.key.toString()),
+                              );
+                            })
+                          ]),
+                          LabeledColumn(label: "Ready", children: [
+                            ...planningContext.ready.map((p) {
+                              return NamedBox(
+                                name: p.key.toString(),
+                                label: p.remainingTime.toString(),
+                                key: Key(p.key.toString()),
+                              );
+                            })
+                          ]),
+                          const SizedBox(width: 5),
+                          LabeledColumn(label: "Executing", children: planningContext.hasCurrentProcess()
+                            ? [ NamedBox(
+                                name: planningContext.currentProcess!.key.toString(),
+                                label: planningContext.currentProcess!.remainingTime.toString(),
+                                key: Key(planningContext.currentProcess!.key.toString()),
+                              ) ]
+                            : [],
+                          ),
+                          const SizedBox(width: 5),
+                          LabeledColumn(label: "Completed", children: [
+                            ...planningContext.completed.map((p) {
+                              return NamedBox(
+                                name: p.key.toString(),
+                                label: p.remainingTime.toString(),
+                                key: Key(p.key.toString()),
+                              );
+                            })
+                          ]),
+                        ],
+                      ),
+                    )
+                  )
                 ],
               ),
-            ],
+            )
           ),
         ),
-        const DropdownMenu(
-          onSelected: null,
-          initialSelection: 0,
+        DropdownMenu(
+          onSelected: handleDropdownSelected,
+          initialSelection: GlobalState.currentPlanningAlgorithm,
           dropdownMenuEntries: [
-            DropdownMenuEntry(value: 0, label: "FIFO"),
-            DropdownMenuEntry(value: 1, label: "SJF"),
+            ...GlobalState.planningAlgorithms.indexed.map((entry) {
+              int index = entry.$1;
+              var algoDef = entry.$2;
+              return DropdownMenuEntry(value: index, label: algoDef.$1);
+            })
           ]
         ),
         ElevatedButton(

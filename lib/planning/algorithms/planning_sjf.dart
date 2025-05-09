@@ -7,17 +7,18 @@ class PlanningSjf extends PlanningAlgorithm {
   PlanningContext nextState(PlanningContext oldState) {
     PlanningContext newState = PlanningContext.from(oldState);
     newState.tickTime();
+    newState.burstCpu();
 
-    CpuProcess? shortestProcess;
-    if (newState.currentProcess != null) {
-      shortestProcess = oldState.currentProcess!;
-    }
-    for (CpuProcess currentProcess in newState.ready) {
-      if (shortestProcess == null || currentProcess.remainingTime < shortestProcess.remainingTime) {
-        shortestProcess = currentProcess;
+    if (newState.currentProcess == null) {
+      CpuProcess? shortestProcess;
+      for (CpuProcess currentProcess in newState.ready) {
+        if (shortestProcess == null || currentProcess.remainingTime < shortestProcess.remainingTime) {
+          shortestProcess = currentProcess;
+        }
       }
+      shortestProcess != null && newState.moveToCpu(shortestProcess);
     }
-    shortestProcess != null && newState.moveToCpu(shortestProcess);
+
     return newState;
   }
 }

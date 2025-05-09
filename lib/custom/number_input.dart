@@ -27,7 +27,7 @@ class NumberInput extends StatelessWidget {
 
   void handleChange(String newValue) {
     if (newValue.isEmpty) {
-      controller.text = "0";
+      controller.text = minValue.toString();
       selectAllText();
       return;
     }
@@ -36,7 +36,7 @@ class NumberInput extends StatelessWidget {
       controller.text = initialValue.toString();
       return;
     }
-    if (numValue < minValue && minValue != initialValue) {
+    if (numValue < minValue) {
       controller.text = minValue.toString();
       onChanged(minValue);
       return;
