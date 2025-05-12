@@ -25,6 +25,8 @@ class ReplacementHistoryGrid extends StatelessWidget {
     }
     List<Widget> columnCells = [];
     for (int i = 0; i < history.frameSize; i++) {
+    String cellText = history.frames[time][i].toString();
+    if (cellText == "-1") cellText = "";
     columnCells.add(
       Container(
         width: 150,
@@ -37,7 +39,7 @@ class ReplacementHistoryGrid extends StatelessWidget {
           ),
         ),
         child: Text(
-          history.frames[time][i].toString(),
+          cellText,
           textAlign: TextAlign.center,
           style: const TextStyle(
             fontWeight: FontWeight.bold,

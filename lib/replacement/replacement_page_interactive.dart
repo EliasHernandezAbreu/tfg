@@ -18,6 +18,8 @@ class ReplacementPageInteractive extends StatefulWidget {
 }
 
 class _ReplacementPageInteractive extends State<ReplacementPageInteractive> {
+  ScrollController controller = ScrollController(
+  );
   int newPage = 0;
   ReplacementHistory _history = ReplacementHistory(GlobalState.replacementFrameAmount);
   ReplacementContext _context = ReplacementContext(GlobalState.replacementFrameAmount);
@@ -39,6 +41,11 @@ class _ReplacementPageInteractive extends State<ReplacementPageInteractive> {
       _history.addSnapshot(newContext.frames, newContext.lastWasHit, newContext.lastImportant);
 
       _context = newContext;
+      controller.animateTo(
+        controller.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.fastOutSlowIn,
+      );
     });
   }
 
@@ -88,12 +95,13 @@ class _ReplacementPageInteractive extends State<ReplacementPageInteractive> {
               border: Border.all(width: 4, color: Colors.black38),
             ),
             child: SingleChildScrollView(
+              controller: controller,
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  const SizedBox(width: 200,),
+                  const SizedBox(width: 400,),
                   ReplacementHistoryGrid(history: _history),
-                  const SizedBox(width: 200,),
+                  const SizedBox(width: 400,),
                 ],
               ),
             )
