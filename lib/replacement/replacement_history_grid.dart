@@ -9,19 +9,21 @@ class ReplacementHistoryGrid extends StatelessWidget {
     required this.history,
   });
 
-  Widget snapshotColumn(int time) {
+  Widget snapshotColumn(BuildContext context, int time) {
+    ThemeData theme = Theme.of(context);
+
     String hitText = "";
     Color hitColor = Colors.white;
     Color cellColor = Colors.white;
     if (history.areHits[time] == true) {
       hitText = "HIT";
       hitColor = Colors.green;
-      cellColor = const Color.fromRGBO(200, 255, 200, 1);
+      cellColor = const Color.fromRGBO(200, 255, 200, 0.5);
     }
     if (history.areHits[time] == false) {
       hitText = "FAIL";
       hitColor = Colors.red;
-      cellColor = const Color.fromRGBO(255, 200, 200, 1);
+      cellColor = const Color.fromRGBO(255, 200, 200, 0.5);
     }
     List<Widget> columnCells = [];
     for (int i = 0; i < history.frameSize; i++) {
@@ -32,7 +34,9 @@ class ReplacementHistoryGrid extends StatelessWidget {
         width: 150,
         height: 50,
         decoration: BoxDecoration(
-          color: i == history.importantFrames[time] ? cellColor : Colors.white,
+          color: i == history.importantFrames[time]
+            ? cellColor
+            : theme.scaffoldBackgroundColor,
           border: Border.all(
             color: Colors.black,
             width: 2,
@@ -58,7 +62,6 @@ class ReplacementHistoryGrid extends StatelessWidget {
             Text(
               "$time${hitText == "" ? "" : ": "}",
               style: const TextStyle(
-                color: Colors.black,
                 fontWeight: FontWeight.bold,
                 fontSize: 24,
               ),
@@ -78,12 +81,12 @@ class ReplacementHistoryGrid extends StatelessWidget {
     );
   }
 
-  List<Widget> allSnapshotColumns() {
+  List<Widget> allSnapshotColumns(BuildContext context) {
     List<Widget> columns = [];
     Widget gap = const SizedBox(width: 12);
 
     for (int i = 0; i < history.currentSize; i++) {
-      columns.add(snapshotColumn(i));
+      columns.add(snapshotColumn(context, i));
       columns.add(gap);
     }
     return columns;
@@ -93,7 +96,7 @@ class ReplacementHistoryGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: allSnapshotColumns(),
+      children: allSnapshotColumns(context),
     );
   }
 }

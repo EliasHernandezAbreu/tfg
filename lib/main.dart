@@ -1,26 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:tfg/global_state.dart';
 import 'package:tfg/main_window.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const SimOS());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class SimOS extends StatefulWidget {
+  const SimOS({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _SimOS();
+}
+
+class _SimOS extends State<SimOS> {
+  void setDarkMode(bool value) {
+    setState(() {
+      GlobalState.darkMode = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'SimOS',
-      theme: ThemeData(
-        primaryColor: Colors.blue,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.blue,
-          foregroundColor: Colors.white
-        ),
-        useMaterial3: true,
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.from(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.light,
+        )
       ),
-    home: const MainWindow(),
+      darkTheme: ThemeData.from(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.dark,
+        )
+      ),
+      themeMode: GlobalState.darkMode ? ThemeMode.dark : ThemeMode.light,
+      home: MainWindow(
+        setDarkMode: setDarkMode
+      ),
     );
   }
 }

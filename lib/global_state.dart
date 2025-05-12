@@ -27,4 +27,6 @@ abstract class GlobalState {
   ];
   static int currentReplacementAlgorithm = 0; // As index of replacement algorithms
   static int replacementFrameAmount = 3;
+
+  static bool darkMode = true;
 }

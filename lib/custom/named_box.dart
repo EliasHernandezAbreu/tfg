@@ -14,12 +14,14 @@ class NamedBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+
     return Container(
       width: 100,
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-        color: Colors.white,
-        border: Border(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        color: theme.cardColor,
+        border: const Border(
           bottom: BorderSide(width: 4, color: Colors.blue)
         ),
       ),
@@ -33,7 +35,7 @@ class NamedBox extends StatelessWidget {
           ),
           Expanded(child: Text(
             label,
-            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
+            style: const TextStyle(fontWeight: FontWeight.w700),
             textAlign: TextAlign.center,
           ),
         )],

@@ -1,18 +1,23 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:tfg/about_page.dart';
 import 'package:tfg/app_page.dart';
+import 'package:tfg/global_state.dart';
 import 'package:tfg/home_page.dart';
 import 'package:tfg/planning/planning_page.dart';
 import 'package:tfg/replacement/replacement_page.dart';
 
 class MainWindow extends StatefulWidget {
-  const MainWindow({super.key});
+  final void Function(bool value) setDarkMode;
+
+  const MainWindow({
+    super.key,
+    required this.setDarkMode,
+  });
 
   @override
-  State<MainWindow> createState() {
-    return _MainWindowState();
-  }
+  State<MainWindow> createState() => _MainWindowState();
 }
 
 class _MainWindowState extends State<MainWindow> {
@@ -27,8 +32,22 @@ class _MainWindowState extends State<MainWindow> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          Switch(
+            value: GlobalState.darkMode,
+            onChanged: widget.setDarkMode,
+            thumbIcon: WidgetStateProperty.resolveWith<Icon?>((Set<WidgetState> states) {
+              if (states.contains(WidgetState.selected)) {
+                return const Icon(Icons.dark_mode);
+              }
+              return const Icon(Icons.light_mode); // All other states will use the default thumbIcon.
+            }),
+          ),
+        ],
         title: Row(
           children: [
             const Text("SimOS"),
@@ -36,6 +55,7 @@ class _MainWindowState extends State<MainWindow> {
             Image.file(
               File("assets/logo.png"),
               height: 40,
+              color: theme.iconTheme.color,
             )
           ],
         )
@@ -49,8 +69,8 @@ class _MainWindowState extends State<MainWindow> {
                   const Text('SimOS'),
                   Image.file(
                     File("assets/logo.png"),
-                    color: Colors.black,
                     width: 100,
+                    color: theme.iconTheme.color,
                   )
                 ],
               )
@@ -66,7 +86,11 @@ class _MainWindowState extends State<MainWindow> {
             ListTile(
               title: const Text('Page replacement'),
               onTap: () { setAppPage(AppPage.replacement, context); },
-            )
+            ),
+            ListTile(
+              title: const Text('About'),
+              onTap: () { setAppPage(AppPage.about, context); },
+            ),
           ],
         ),
       ),
@@ -75,6 +99,7 @@ class _MainWindowState extends State<MainWindow> {
         AppPage.home => const HomePage(),
         AppPage.planning => const PlanningPage(),
         AppPage.replacement => const ReplacementPage(),
+        AppPage.about => const AboutPage(),
       },
     );
   }
