@@ -4,16 +4,19 @@ import 'package:tfg/custom/named_box.dart';
 import 'package:tfg/global_state.dart';
 import 'package:tfg/planning/planning_context.dart';
 
-class PlanningSimulation extends StatefulWidget {
-  const PlanningSimulation({
+class PlanningPageInteractive extends StatefulWidget {
+  final void Function() backFunction;
+
+  const PlanningPageInteractive({
     super.key,
+    required this.backFunction,
   });
 
   @override
-  State<StatefulWidget> createState() => _PlanningSimulation();
+  State<StatefulWidget> createState() => _PlanningPageInteractive();
 }
 
-class _PlanningSimulation extends State<PlanningSimulation> {
+class _PlanningPageInteractive extends State<PlanningPageInteractive> {
   PlanningContext planningContext = PlanningContext(GlobalState.processes);
 
   void handleDropdownSelected(int? index) {
@@ -29,10 +32,41 @@ class _PlanningSimulation extends State<PlanningSimulation> {
     });
   }
 
+  void restartSimulation() {
+    setState(() {
+      planningContext = PlanningContext(GlobalState.processes);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                IconButton(
+                  onPressed: widget.backFunction,
+                  icon: const Icon(Icons.arrow_back),
+                ),
+                const Text("Back"),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                const Text("Restart"),
+                IconButton(
+                  onPressed: restartSimulation,
+                  icon: const Icon(Icons.restore),
+                ),
+              ],
+            ),
+          ],
+        ),
         Expanded(
           child: Container(
             padding: const EdgeInsets.all(8),

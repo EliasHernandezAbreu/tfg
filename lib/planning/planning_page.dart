@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tfg/global_state.dart';
-import 'package:tfg/planning/cpu_process.dart';
-import 'package:tfg/planning/planning_algorithm.dart';
-import 'package:tfg/planning/planning_process_list.dart';
-import 'package:tfg/planning/planning_simulation.dart';
+import 'package:tfg/planning/planning_page_config.dart';
+import 'package:tfg/planning/planning_page_interactive.dart';
 
 class PlanningPage extends StatefulWidget {
   const PlanningPage({super.key});
@@ -15,50 +12,34 @@ class PlanningPage extends StatefulWidget {
 }
 
 class _PlanningPageState extends State<PlanningPage> {
-  int currentPlanningPage = 0;
+  int currentPage = 0;
 
-  void clickedElevatedButton() {
+  void setConfigPage() {
     setState(() {
-      if (currentPlanningPage == 0) {
-        currentPlanningPage = 1;
-        return;
-      }
-      if (currentPlanningPage == 1) {
-        currentPlanningPage = 0;
-        return;
-      }
+      currentPage = 0;
+    });
+  }
+  void setInteractivePage() {
+    setState(() {
+      currentPage = 1;
+    });
+  }
+  void setStaticPage() {
+    setState(() {
+      currentPage = 2;
     });
   }
 
-  Widget getFloatingButton() {
-    if (currentPlanningPage == 0) {
-      return FloatingActionButton.extended(
-        onPressed: clickedElevatedButton,
-        label: const Text("Start simulation"),
-        icon: const Icon(Icons.pie_chart),
-      );
-    } else if (currentPlanningPage == 1) {
-      return FloatingActionButton.extended(
-        onPressed: clickedElevatedButton,
-        label: const Text("Exit simulation"),
-        icon: const Icon(Icons.pie_chart),
-      );
-    } else {
-      return FloatingActionButton.extended(
-        onPressed: clickedElevatedButton,
-        label: const Text("GET OUT"),
-        icon: const Icon(Icons.pie_chart),
-      );
-    }
-  }
-
   Widget decidePageBody() {
-    if (currentPlanningPage == 0) {
-      return const PlanningProcessList();
-    } else if (currentPlanningPage == 1) {
-      return const PlanningSimulation();
-    } else {
-      return const Text("You're not supposed to be here btw");
+    switch (currentPage) {
+      case 0: return PlanningPageConfig(
+        startInteractiveSimulation: setInteractivePage,
+        startStaticSimulation: setStaticPage,
+      );
+      case 1: return PlanningPageInteractive(
+        backFunction: setConfigPage
+      );
+      default: return const Text("Uhh");
     }
   }
 
@@ -66,10 +47,7 @@ class _PlanningPageState extends State<PlanningPage> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(24) ,
-      child: Scaffold(
-        body: decidePageBody(),
-        floatingActionButton: getFloatingButton()
-      )
+      child: decidePageBody()
     );
   }
 }

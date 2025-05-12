@@ -3,16 +3,21 @@ import 'package:tfg/custom/number_input.dart';
 import 'package:tfg/global_state.dart';
 import 'package:tfg/planning/cpu_process.dart';
 
-class PlanningProcessList extends StatefulWidget {
-  const PlanningProcessList({
+class PlanningPageConfig extends StatefulWidget {
+  final void Function() startInteractiveSimulation;
+  final void Function() startStaticSimulation;
+
+  const PlanningPageConfig({
     super.key,
+    required this.startInteractiveSimulation,
+    required this.startStaticSimulation,
   });
 
   @override
-  State<StatefulWidget> createState() => _PlanningProcessList();
+  State<StatefulWidget> createState() => _PlanningPageConfig();
 }
 
-class _PlanningProcessList extends State<PlanningProcessList> {
+class _PlanningPageConfig extends State<PlanningPageConfig> {
   void removeProcess(int index) {
     if (GlobalState.processes.length <= 1) return;
     setState(() {
@@ -109,7 +114,33 @@ class _PlanningProcessList extends State<PlanningProcessList> {
             ),
           )
         ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ElevatedButton(
+              onPressed: widget.startStaticSimulation,
+              child: const Text("Start static simulation"),
+            ),
+            DropdownMenu(
+              onSelected: (int? algo) { GlobalState.currentPlanningAlgorithm = algo!; },
+              initialSelection: GlobalState.currentPlanningAlgorithm,
+              dropdownMenuEntries: [
+                ...GlobalState.planningAlgorithms.indexed.map((entry) {
+                  int index = entry.$1;
+                  var algoDef = entry.$2;
+                  return DropdownMenuEntry(value: index, label: algoDef.$1);
+                })
+              ]
+            ),
+            ElevatedButton(
+              onPressed: widget.startInteractiveSimulation,
+              child: const Text("Start interactive simulation"),
+            ),
+          ],
+        ),
       ],
     );
   }
 }
+
+

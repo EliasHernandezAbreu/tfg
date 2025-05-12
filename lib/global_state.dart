@@ -26,4 +26,5 @@ abstract class GlobalState {
     ("Op", ReplacementOp(), "Optimal"),
   ];
   static int currentReplacementAlgorithm = 0; // As index of replacement algorithms
+  static int replacementFrameAmount = 3;
 }
