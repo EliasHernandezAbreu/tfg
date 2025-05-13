@@ -5,6 +5,7 @@ class CpuProcess {
   int priority;
 
   int remainingTime = 0;
+  int completionTime = -1;
 
   CpuProcess(this.enterTime, this.timeToComplete, this.priority) {
     remainingTime = timeToComplete;

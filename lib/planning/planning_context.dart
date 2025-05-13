@@ -48,6 +48,7 @@ class PlanningContext {
     if (currentProcess == null) return;
     currentProcess?.remainingTime -= 1;
     if (currentProcess!.remainingTime <= 0) {
+      currentProcess!.completionTime = currentTime;
       completed.add(currentProcess!);
       currentProcess = null;
     }

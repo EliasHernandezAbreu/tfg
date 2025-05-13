@@ -29,7 +29,7 @@ class _SimOS extends State<SimOS> {
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.blue,
           brightness: Brightness.light,
-        )
+        ),
       ),
       darkTheme: ThemeData.from(
         colorScheme: ColorScheme.fromSeed(

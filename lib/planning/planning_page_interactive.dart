@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tfg/custom/labeled_column.dart';
-import 'package:tfg/custom/named_box.dart';
 import 'package:tfg/global_state.dart';
+import 'package:tfg/planning/cpu_process_view.dart';
 import 'package:tfg/planning/planning_context.dart';
 
 class PlanningPageInteractive extends StatefulWidget {
@@ -95,38 +95,40 @@ class _PlanningPageInteractive extends State<PlanningPageInteractive> {
                         children: [
                           LabeledColumn(label: "Pending enter", children: [
                             ...planningContext.pendingEnter.map((p) {
-                              return NamedBox(
-                                name: p.key.toString(),
-                                label: p.remainingTime.toString(),
-                                key: Key(p.key.toString()),
+                              return CpuProcessView(
+                                key: GlobalObjectKey(p.key!),
+                                process: p,
+                                mainElement: CpuProcessViewMainElement.enterTime,
                               );
                             })
                           ]),
                           LabeledColumn(label: "Ready", children: [
                             ...planningContext.ready.map((p) {
-                              return NamedBox(
-                                name: p.key.toString(),
-                                label: p.remainingTime.toString(),
-                                key: Key(p.key.toString()),
+                              return CpuProcessView(
+                                key: GlobalObjectKey(p.key!),
+                                process: p,
+                                mainElement: CpuProcessViewMainElement.remainingTime,
                               );
                             })
                           ]),
                           const SizedBox(width: 5),
                           LabeledColumn(label: "Executing", children: planningContext.hasCurrentProcess()
-                            ? [ NamedBox(
-                                name: planningContext.currentProcess!.key.toString(),
-                                label: planningContext.currentProcess!.remainingTime.toString(),
-                                key: Key(planningContext.currentProcess!.key.toString()),
-                              ) ]
+                            ? [
+                                CpuProcessView(
+                                  key: GlobalObjectKey(planningContext.currentProcess!.key!),
+                                  process: planningContext.currentProcess!,
+                                  mainElement: CpuProcessViewMainElement.remainingTime,
+                                )
+                              ]
                             : [],
                           ),
                           const SizedBox(width: 5),
                           LabeledColumn(label: "Completed", children: [
                             ...planningContext.completed.map((p) {
-                              return NamedBox(
-                                name: p.key.toString(),
-                                label: p.remainingTime.toString(),
-                                key: Key(p.key.toString()),
+                              return CpuProcessView(
+                                key: GlobalObjectKey(p.key!),
+                                process: p,
+                                mainElement: CpuProcessViewMainElement.completionTime,
                               );
                             })
                           ]),

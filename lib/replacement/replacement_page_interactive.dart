@@ -133,12 +133,12 @@ class _ReplacementPageInteractive extends State<ReplacementPageInteractive> {
                         scrollDirection: Axis.vertical,
                         child: Row(
                           children: [
-                            const SizedBox(width: 400,),
+                            const SizedBox(width: 400),
                             ReplacementHistoryGrid(
                               onCellClick: sendNewPage,
                               history: _history
                             ),
-                            const SizedBox(width: 400,),
+                            const SizedBox(width: 400),
                           ],
                         ),
                       )

@@ -129,12 +129,8 @@ class _PlanningPageConfig extends State<PlanningPageConfig> {
           )
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
-              onPressed: widget.startStaticSimulation,
-              child: const Text("Start static simulation"),
-            ),
             DropdownMenu(
               onSelected: (int? algo) { GlobalState.currentPlanningAlgorithm = algo!; },
               initialSelection: GlobalState.currentPlanningAlgorithm,
@@ -146,10 +142,19 @@ class _PlanningPageConfig extends State<PlanningPageConfig> {
                 })
               ]
             ),
-            ElevatedButton(
-              onPressed: widget.startInteractiveSimulation,
-              child: const Text("Start interactive simulation"),
-            ),
+            const SizedBox(width: 30),
+            Column(
+              children: [
+                ElevatedButton(
+                  onPressed: widget.startStaticSimulation,
+                  child: const Text("Start static simulation"),
+                ),
+                ElevatedButton(
+                  onPressed: widget.startInteractiveSimulation,
+                  child: const Text("Start interactive simulation"),
+                ),
+              ],
+            )
           ],
         ),
       ],
