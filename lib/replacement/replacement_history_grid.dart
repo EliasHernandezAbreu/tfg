@@ -12,6 +12,8 @@ class ReplacementHistoryGrid extends StatelessWidget {
   Widget snapshotColumn(BuildContext context, int time) {
     ThemeData theme = Theme.of(context);
 
+    Color subTextColor = theme.hintColor;
+
     String hitText = "";
     Color hitColor = Colors.white;
     Color cellColor = Colors.white;
@@ -32,7 +34,7 @@ class ReplacementHistoryGrid extends StatelessWidget {
     columnCells.add(
       Container(
         width: 150,
-        height: 50,
+        height: 60,
         decoration: BoxDecoration(
           color: i == history.importantFrames[time]
             ? cellColor
@@ -42,13 +44,75 @@ class ReplacementHistoryGrid extends StatelessWidget {
             width: 2,
           ),
         ),
-        child: Text(
-          cellText,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  cellText,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
+                ),
+              ]
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Tooltip(
+                  message: "Frame age",
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.timer,
+                        size: 12,
+                        color: subTextColor,
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        history.frameAges[time][i].toString(),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                          color: subTextColor,
+                        ),
+                      ),
+                    ]
+                  ),
+                ),
+                Tooltip(
+                  message: "Frame recency",
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.punch_clock,
+                        size: 12,
+                        color: subTextColor,
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        history.frameRecency[time][i].toString(),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                          color: subTextColor,
+                        ),
+                      ),
+                    ]
+                  ),
+                ),
+              ],
+            )
+          ],
         ),
       )
     );

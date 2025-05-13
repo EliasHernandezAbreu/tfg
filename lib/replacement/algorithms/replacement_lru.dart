@@ -5,13 +5,19 @@ class ReplacementLru extends ReplacementAlgorithm {
   @override
   ReplacementContext nextState(ReplacementContext oldState, int newPage) {
     ReplacementContext newState = ReplacementContext.from(oldState);
+    newState.tickTime();
 
-    if (oldState.frames.contains(newPage)) {
-      newState.hits += 1;
-    } else {
-      newState.failures += 1;
-      newState.frames.insert(0, newPage);
-      newState.frames.removeLast();
+    int index = newState.checkPage(newPage);
+    if (index < 0) {
+      int oldestFrame = 0;
+      int oldestFrameAge = 0;
+      for (int i = 0; i < newState.useRecency.length; i++) {
+        if (newState.useRecency[i] > oldestFrameAge) {
+          oldestFrame = i;
+          oldestFrameAge = newState.useRecency[i];
+        }
+      }
+      newState.replacePage(oldestFrame, newPage);
     }
 
     return newState;

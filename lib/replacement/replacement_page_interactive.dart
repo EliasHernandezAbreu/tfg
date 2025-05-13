@@ -38,7 +38,7 @@ class _ReplacementPageInteractive extends State<ReplacementPageInteractive> {
     setState(() {
       var algo = GlobalState.replacementAlgorithms[GlobalState.currentReplacementAlgorithm].$2;
       var newContext = algo.nextState(_context, newPage);
-      _history.addSnapshot(newContext.frames, newContext.lastWasHit, newContext.lastImportant);
+      _history.addSnapshot(newContext);
 
       _context = newContext;
       controller.animateTo(
@@ -94,17 +94,49 @@ class _ReplacementPageInteractive extends State<ReplacementPageInteractive> {
               borderRadius: const BorderRadius.all(Radius.circular(8)),
               border: Border.all(width: 4, color: Colors.black38),
             ),
-            child: SingleChildScrollView(
-              controller: controller,
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  const SizedBox(width: 400,),
-                  ReplacementHistoryGrid(history: _history),
-                  const SizedBox(width: 400,),
-                ],
-              ),
-            )
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "HITS: ${_context.hits}",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                        color: Colors.green,
+                      ),
+                    ),
+                    const SizedBox(width: 50),
+                    Text(
+                      "FAILURES: ${_context.failures}",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: Scrollbar(
+                    controller: controller,
+                    child: SingleChildScrollView(
+                      controller: controller,
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          const SizedBox(width: 400,),
+                          ReplacementHistoryGrid(history: _history),
+                          const SizedBox(width: 400,),
+                        ],
+                      ),
+                    )
+                  )
+                ),
+              ],
+            ),
           )
         ),
         DropdownMenu(
