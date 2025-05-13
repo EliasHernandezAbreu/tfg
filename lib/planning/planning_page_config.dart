@@ -27,7 +27,7 @@ class _PlanningPageConfig extends State<PlanningPageConfig> {
 
   void addProcess() {
     setState(() {
-      GlobalState.processes.add(CpuProcess(0, 1));
+      GlobalState.processes.add(CpuProcess(0, 1, 3));
     });
   }
 
@@ -39,6 +39,11 @@ class _PlanningPageConfig extends State<PlanningPageConfig> {
   void changeProcessTimeToComplete(int index, int value) {
     setState(() {
       GlobalState.processes[index].timeToComplete = value;
+    });
+  }
+  void changeProcessPriority(int index, int value) {
+    setState(() {
+      GlobalState.processes[index].priority = value;
     });
   }
 
@@ -68,6 +73,11 @@ class _PlanningPageConfig extends State<PlanningPageConfig> {
           initialValue: process.timeToComplete,
           minValue: 1,
         ),
+        NumberInput(
+          onChanged: (value) { changeProcessPriority(index, value); },
+          initialValue: process.priority,
+          minValue: 1,
+        ),
       ]
     );
   }
@@ -79,6 +89,10 @@ class _PlanningPageConfig extends State<PlanningPageConfig> {
         const Text('Index', textAlign: TextAlign.center),
         const Text('Enter time', textAlign: TextAlign.center),
         const Text('Time to complete', textAlign: TextAlign.center),
+        const Tooltip(
+          message: "Lower number represents higher priority",
+          child: Text('Priority', textAlign: TextAlign.center),
+        ) 
       ]
     );
   }

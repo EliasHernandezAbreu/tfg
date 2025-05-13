@@ -3,11 +3,18 @@ import 'package:tfg/replacement/replacement_history.dart';
 
 class ReplacementHistoryGrid extends StatelessWidget {
   final ReplacementHistory history;
+  final void Function(int page)? onCellClick;
 
   const ReplacementHistoryGrid({
     super.key,
     required this.history,
+    this.onCellClick,
   });
+
+  void handleCellClick(int time, int cell) {
+    if (history.frames[time][cell] < 0) return; 
+    onCellClick?.call(history.frames[time][cell]);
+  }
 
   Widget snapshotColumn(BuildContext context, int time) {
     ThemeData theme = Theme.of(context);
@@ -44,75 +51,79 @@ class ReplacementHistoryGrid extends StatelessWidget {
             width: 2,
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  cellText,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () { handleCellClick(time, i); },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    cellText,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
                   ),
-                ),
-              ]
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Tooltip(
-                  message: "Frame age",
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.timer,
-                        size: 12,
-                        color: subTextColor,
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        history.frameAges[time][i].toString(),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12,
+                ]
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Tooltip(
+                    message: "Frame age",
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.timer,
+                          size: 12,
                           color: subTextColor,
                         ),
-                      ),
-                    ]
+                        const SizedBox(width: 10),
+                        Text(
+                          history.frameAges[time][i].toString(),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            color: subTextColor,
+                          ),
+                        ),
+                      ]
+                    ),
                   ),
-                ),
-                Tooltip(
-                  message: "Frame recency",
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.punch_clock,
-                        size: 12,
-                        color: subTextColor,
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        history.frameRecency[time][i].toString(),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12,
+                  Tooltip(
+                    message: "Frame recency",
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.punch_clock,
+                          size: 12,
                           color: subTextColor,
                         ),
-                      ),
-                    ]
+                        const SizedBox(width: 10),
+                        Text(
+                          history.frameRecency[time][i].toString(),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            color: subTextColor,
+                          ),
+                        ),
+                      ]
+                    ),
                   ),
-                ),
-              ],
-            )
-          ],
+                ],
+              )
+            ],
+          ),
         ),
       )
     );

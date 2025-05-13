@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tfg/custom/number_input.dart';
 import 'package:tfg/global_state.dart';
 
 class ReplacementPageConfig extends StatefulWidget {
@@ -34,6 +35,11 @@ class _ReplacementPageConfig extends State<ReplacementPageConfig> {
               return DropdownMenuEntry(value: index, label: algoDef.$1);
             })
           ]
+        ),
+        NumberInput(
+          minValue: 1,
+          initialValue: GlobalState.replacementFrameAmount,
+          onChanged: (int value) { GlobalState.replacementFrameAmount = value; },
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,

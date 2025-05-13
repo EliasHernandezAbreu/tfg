@@ -7,25 +7,22 @@ class ReplacementMru extends ReplacementAlgorithm {
     ReplacementContext newState = ReplacementContext.from(oldState);
     newState.tickTime();
 
-    if (oldState.frames.contains(newPage)) {
-      newState.hits += 1;
-      newState.lastWasHit = true;
-      newState.lastImportant = oldState.frames.indexOf(newPage);
-      newState.frameAges[newState.lastImportant!] = 0;
-    } else {
-      newState.failures += 1;
-      newState.lastWasHit = false;
+    int index = newState.checkPage(newPage);
+    if (index < 0) {
       int youngestFrame = 0;
       int youngestFrameAge = 0;
-      for (int i = 0; i < newState.frameAges.length; i++) {
-        if (newState.frameAges[i] < youngestFrameAge) {
+      for (int i = 0; i < newState.useRecency.length; i++) {
+        if (newState.frames[youngestFrame] == -1) break;
+        if (newState.frames[i] == -1) {
           youngestFrame = i;
-          youngestFrameAge = newState.frameAges[i];
+          break;
+        }
+        if (newState.useRecency[i] < youngestFrameAge) {
+          youngestFrame = i;
+          youngestFrameAge = newState.useRecency[i];
         }
       }
-      newState.lastImportant = youngestFrame;
-      newState.frames[youngestFrame] = newPage;
-      newState.frameAges[youngestFrame] = 0;
+      newState.replacePage(youngestFrame, newPage);
     }
 
     return newState;

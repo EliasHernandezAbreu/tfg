@@ -35,9 +35,13 @@ class _ReplacementPageInteractive extends State<ReplacementPageInteractive> {
   }
 
   void handleButtonClick() {
+    sendNewPage(newPage);
+  }
+
+  void sendNewPage(int page) {
     setState(() {
       var algo = GlobalState.replacementAlgorithms[GlobalState.currentReplacementAlgorithm].$2;
-      var newContext = algo.nextState(_context, newPage);
+      var newContext = algo.nextState(_context, page);
       _history.addSnapshot(newContext);
 
       _context = newContext;
@@ -125,13 +129,19 @@ class _ReplacementPageInteractive extends State<ReplacementPageInteractive> {
                     child: SingleChildScrollView(
                       controller: controller,
                       scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          const SizedBox(width: 400,),
-                          ReplacementHistoryGrid(history: _history),
-                          const SizedBox(width: 400,),
-                        ],
-                      ),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: Row(
+                          children: [
+                            const SizedBox(width: 400,),
+                            ReplacementHistoryGrid(
+                              onCellClick: sendNewPage,
+                              history: _history
+                            ),
+                            const SizedBox(width: 400,),
+                          ],
+                        ),
+                      )
                     )
                   )
                 ),
