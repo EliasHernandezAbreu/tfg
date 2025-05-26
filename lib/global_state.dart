@@ -24,7 +24,7 @@ abstract class GlobalState {
   ];
   static List<CpuProcess> processes = [CpuProcess(0, 1, 3)]; // List of processes
   static int currentPlanningAlgorithm = 0; // As index of planning algorithms
-  static int planningRRTime = 2;
+  static int planningRRTime = 3; // Time between round robin cycles
 
   static var replacementAlgorithms = [
     ("FIFO", ReplacementFifo(), "First in, first out"),

@@ -47,6 +47,17 @@ class _PlanningPageConfig extends State<PlanningPageConfig> {
     });
   }
 
+  void changeAlgorithm(int? index) {
+    setState(() {
+      GlobalState.currentPlanningAlgorithm = index!;
+    });
+  }
+  void changeRrTime(int value) {
+    setState(() {
+      GlobalState.planningRRTime = value;
+    });
+  }
+
   TableRow processRow((int, CpuProcess) pair) {
     int index = pair.$1;
     CpuProcess process = pair.$2;
@@ -128,11 +139,16 @@ class _PlanningPageConfig extends State<PlanningPageConfig> {
             ),
           )
         ),
+        const SizedBox(height: 30),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const Text(
+              "Algorithm:",
+            ),
+            const SizedBox(width: 20),
             DropdownMenu(
-              onSelected: (int? algo) { GlobalState.currentPlanningAlgorithm = algo!; },
+              onSelected: changeAlgorithm,
               initialSelection: GlobalState.currentPlanningAlgorithm,
               dropdownMenuEntries: [
                 ...GlobalState.planningAlgorithms.indexed.map((entry) {
@@ -142,19 +158,41 @@ class _PlanningPageConfig extends State<PlanningPageConfig> {
                 })
               ]
             ),
-            const SizedBox(width: 30),
-            Column(
-              children: [
-                ElevatedButton(
-                  onPressed: widget.startStaticSimulation,
-                  child: const Text("Start static simulation"),
-                ),
-                ElevatedButton(
-                  onPressed: widget.startInteractiveSimulation,
-                  child: const Text("Start interactive simulation"),
-                ),
-              ],
-            )
+          ],
+        ),
+        const SizedBox(height: 10),
+        if (GlobalState.currentPlanningAlgorithm == 6) Row( // 6 is Round Robin index
+          children: [
+            Expanded(child: Container()),
+            const Text("Round Robin time:"),
+            const SizedBox(width: 20),
+            Expanded(
+              flex: 2,
+              child: NumberInput(
+                onChanged: changeRrTime,
+                initialValue: GlobalState.planningRRTime,
+                minValue: 1,
+              ),
+            ),
+            Expanded(child: Container()),
+          ],
+        ),
+        const SizedBox(height: 30),
+        const Text(
+          "Start simulation:"
+        ),
+        const SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: widget.startStaticSimulation,
+              child: const Text("STATIC"),
+            ),
+            ElevatedButton(
+              onPressed: widget.startInteractiveSimulation,
+              child: const Text("INTERACTIVE"),
+            ),
           ],
         ),
       ],

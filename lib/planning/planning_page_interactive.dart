@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tfg/custom/labeled_column.dart';
+import 'package:tfg/custom/number_input.dart';
 import 'package:tfg/global_state.dart';
 import 'package:tfg/planning/cpu_process_view.dart';
 import 'package:tfg/planning/planning_context.dart';
@@ -35,6 +36,12 @@ class _PlanningPageInteractive extends State<PlanningPageInteractive> {
   void restartSimulation() {
     setState(() {
       planningContext = PlanningContext(GlobalState.processes);
+    });
+  }
+
+  void changeRrTime(int? value) {
+    setState(() {
+      GlobalState.planningRRTime = value!;
     });
   }
 
@@ -84,6 +91,10 @@ class _PlanningPageInteractive extends State<PlanningPageInteractive> {
                 children: [
                   Text(
                     "Time: ${planningContext.currentTime < 0 ? "NOT STARTED" : planningContext.currentTime}",
+                    style: const TextStyle(fontWeight: FontWeight.bold) 
+                  ),
+                  Text(
+                    "Time since last swap: ${planningContext.timeSinceLastSwap}",
                     style: const TextStyle(fontWeight: FontWeight.bold) 
                   ),
                   const SizedBox(height: 20),
@@ -152,10 +163,52 @@ class _PlanningPageInteractive extends State<PlanningPageInteractive> {
             })
           ]
         ),
-        ElevatedButton(
-          onPressed: simulationStep,
-          child: const Icon(Icons.short_text_sharp)
-        )
+        const SizedBox(height: 20),
+        Row( // 6 is Round Robin index
+          children: [
+            Expanded(
+              flex: 3,
+              child: Container()
+            ),
+            Expanded(
+              flex: 4,
+              child: Column(
+                children: [
+                  if (GlobalState.currentPlanningAlgorithm == 6) Row(
+                    children: [
+                      const Text("Round Robin time:"),
+                      const SizedBox(width: 20),
+                      Expanded(
+                        flex: 3,
+                        child: NumberInput(
+                          onChanged: changeRrTime,
+                          initialValue: GlobalState.planningRRTime,
+                          minValue: 1,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 30),
+                  ElevatedButton(
+                    onPressed: simulationStep,
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.short_text),
+                        SizedBox(width: 10),
+                        Text("STEP"),
+                      ],
+                    )
+                  )
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 3,
+              child: Container()
+            ),
+          ],
+        ),
       ],
     );
   }

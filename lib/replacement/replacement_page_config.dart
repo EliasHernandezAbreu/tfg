@@ -27,7 +27,7 @@ class _ReplacementPageConfig extends State<ReplacementPageConfig> {
       children: [
         DropdownMenu(
           onSelected: handleDropdownSelected,
-          initialSelection: GlobalState.currentPlanningAlgorithm,
+          initialSelection: GlobalState.currentReplacementAlgorithm,
           dropdownMenuEntries: [
             ...GlobalState.replacementAlgorithms.indexed.map((entry) {
               int index = entry.$1;

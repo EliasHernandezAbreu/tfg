@@ -2,6 +2,7 @@ import 'package:tfg/planning/cpu_process.dart';
 
 class PlanningContext {
   int currentTime = -1;
+  int timeSinceLastSwap = 0;
   CpuProcess? currentProcess;
   List<CpuProcess> pendingEnter = [];
   List<CpuProcess> ready = [];
@@ -24,6 +25,7 @@ class PlanningContext {
   PlanningContext.from(PlanningContext oldState) {
     currentTime = oldState.currentTime;
     currentProcess = oldState.currentProcess;
+    timeSinceLastSwap = oldState.timeSinceLastSwap;
 
     pendingEnter = List.from(oldState.pendingEnter);
     ready = List.from(oldState.ready);
@@ -34,6 +36,7 @@ class PlanningContext {
   // Updates time and adds ready processes to the list
   void tickTime() {
     currentTime += 1;
+    timeSinceLastSwap += 1;
     List<CpuProcess> nextPendingEnter = List<CpuProcess>.from(pendingEnter);
     for (CpuProcess process in pendingEnter) {
       if (process.enterTime > currentTime) continue;
@@ -65,6 +68,7 @@ class PlanningContext {
       ready.add(currentProcess!);
     }
     currentProcess = process;
+    timeSinceLastSwap = 0;
     return true;
   }
 }

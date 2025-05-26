@@ -1,3 +1,4 @@
+import 'package:tfg/global_state.dart';
 import 'package:tfg/planning/planning_algorithm.dart';
 import 'package:tfg/planning/planning_context.dart';
 
@@ -8,7 +9,10 @@ class PlanningRr extends PlanningAlgorithm {
     newState.tickTime();
     newState.burstCpu();
 
-    if (newState.currentProcess == null && newState.ready.isNotEmpty) {
+    bool shouldSwap = newState.timeSinceLastSwap >= GlobalState.planningRRTime;
+    shouldSwap = shouldSwap || newState.currentProcess == null;
+    shouldSwap = shouldSwap && newState.ready.isNotEmpty;
+    if (shouldSwap) {
       newState.moveToCpu(newState.ready.first);
     }
 
