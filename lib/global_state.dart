@@ -10,7 +10,6 @@ import 'package:tfg/planning/cpu_process.dart';
 import 'package:tfg/replacement/algorithms/replacement_fifo.dart';
 import 'package:tfg/replacement/algorithms/replacement_lru.dart';
 import 'package:tfg/replacement/algorithms/replacement_mru.dart';
-import 'package:tfg/replacement/algorithms/replacement_op.dart';
 
 abstract class GlobalState {
   static var planningAlgorithms = [
@@ -30,7 +29,6 @@ abstract class GlobalState {
     ("FIFO", ReplacementFifo(), "First in, first out"),
     ("LRU", ReplacementLru(), "Least recently used"),
     ("MRU", ReplacementMru(), "Most recently used"),
-    ("OP", ReplacementOp(), "Optimal"),
   ];
   static int currentReplacementAlgorithm = 0; // As index of replacement algorithms
   static int replacementFrameAmount = 3;
