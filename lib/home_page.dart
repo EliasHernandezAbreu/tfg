@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -30,10 +32,30 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              "SimOS",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 56,
+              ),
+            ),
+            Image.file(
+              File("assets/logo.png"),
+              height: 80,
+              color: theme.iconTheme.color,
+            ),
+          ],
+        ),
+        const SizedBox(height: 100),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

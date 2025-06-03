@@ -118,7 +118,9 @@ class _MainWindowState extends State<MainWindow> {
         AppPage.replacement => ReplacementPage(
           setHomePage: () {setAppPage(AppPage.home, context);},
         ),
-        AppPage.about => const AboutPage(),
+        AppPage.about => AboutPage(
+          setHomePage: () {setAppPage(AppPage.home, context);},
+        ),
       },
     );
   }
