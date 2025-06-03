@@ -33,6 +33,15 @@ class _PlanningPageInteractive extends State<PlanningPageInteractive> {
     });
   }
 
+  void stepToEnd() {
+    setState(() {
+      var currAlgo = GlobalState.planningAlgorithms[GlobalState.currentPlanningAlgorithm].$2;
+      while (!planningContext.finished) {
+        planningContext = currAlgo.nextState(planningContext);
+      }
+    });
+  }
+
   void restartSimulation() {
     setState(() {
       planningContext = PlanningContext(GlobalState.processes);
@@ -89,13 +98,41 @@ class _PlanningPageInteractive extends State<PlanningPageInteractive> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Time: ${planningContext.currentTime < 0 ? "NOT STARTED" : planningContext.currentTime}",
-                    style: const TextStyle(fontWeight: FontWeight.bold) 
-                  ),
-                  Text(
-                    "Time since last swap: ${planningContext.timeSinceLastSwap}",
-                    style: const TextStyle(fontWeight: FontWeight.bold) 
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Time: ${planningContext.currentTime < 0 ?
+                              "NOT STARTED" : planningContext.finished ?
+                                "FINISHED" : planningContext.currentTime}",
+                            style: const TextStyle(fontWeight: FontWeight.bold) 
+                          ),
+                          Text(
+                            "Time since last swap: ${planningContext.timeSinceLastSwap}",
+                            style: const TextStyle(fontWeight: FontWeight.bold) 
+                          ),
+                        ],
+                      ),
+                      Visibility(
+                        visible: planningContext.finished,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              "Average turn around time: ${planningContext.averageTurnAroundTime.toStringAsFixed(2)}",
+                              style: const TextStyle(fontWeight: FontWeight.bold) 
+                            ),
+                            Text(
+                              "Average waiting time: ${planningContext.averageWaitingTime.toStringAsFixed(2)}",
+                              style: const TextStyle(fontWeight: FontWeight.bold) 
+                            ),
+                          ],
+                        )
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 20),
                   Expanded(
@@ -197,6 +234,18 @@ class _PlanningPageInteractive extends State<PlanningPageInteractive> {
                         Icon(Icons.short_text),
                         SizedBox(width: 10),
                         Text("STEP"),
+                      ],
+                    )
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: stepToEnd,
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.textsms),
+                        SizedBox(width: 10),
+                        Text("STEP TO END"),
                       ],
                     )
                   )

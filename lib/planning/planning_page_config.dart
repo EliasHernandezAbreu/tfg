@@ -5,12 +5,12 @@ import 'package:tfg/planning/cpu_process.dart';
 
 class PlanningPageConfig extends StatefulWidget {
   final void Function() startInteractiveSimulation;
-  final void Function() startStaticSimulation;
+  final void Function() setHomePage;
 
   const PlanningPageConfig({
     super.key,
     required this.startInteractiveSimulation,
-    required this.startStaticSimulation,
+    required this.setHomePage,
   });
 
   @override
@@ -112,6 +112,21 @@ class _PlanningPageConfig extends State<PlanningPageConfig> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                IconButton(
+                  onPressed: widget.setHomePage,
+                  icon: const Icon(Icons.arrow_back),
+                ),
+                const Text("Back"),
+              ],
+            ),
+          ],
+        ),
         const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -178,20 +193,12 @@ class _PlanningPageConfig extends State<PlanningPageConfig> {
           ],
         ),
         const SizedBox(height: 30),
-        const Text(
-          "Start simulation:"
-        ),
-        const SizedBox(height: 10),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              onPressed: widget.startStaticSimulation,
-              child: const Text("STATIC"),
-            ),
-            ElevatedButton(
               onPressed: widget.startInteractiveSimulation,
-              child: const Text("INTERACTIVE"),
+              child: const Text("START SIMULATION"),
             ),
           ],
         ),

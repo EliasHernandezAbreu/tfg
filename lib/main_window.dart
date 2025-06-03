@@ -112,8 +112,12 @@ class _MainWindowState extends State<MainWindow> {
           setPlanningPage: () {setAppPage(AppPage.planning, context);},
           exitFunction: exitApp,
         ),
-        AppPage.planning => const PlanningPage(),
-        AppPage.replacement => const ReplacementPage(),
+        AppPage.planning => PlanningPage(
+          setHomePage: () {setAppPage(AppPage.home, context);},
+        ),
+        AppPage.replacement => ReplacementPage(
+          setHomePage: () {setAppPage(AppPage.home, context);},
+        ),
         AppPage.about => const AboutPage(),
       },
     );

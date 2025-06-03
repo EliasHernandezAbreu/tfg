@@ -43,10 +43,13 @@ class _ReplacementPageInteractive extends State<ReplacementPageInteractive> {
       var algo = GlobalState.replacementAlgorithms[GlobalState.currentReplacementAlgorithm].$2;
       var newContext = algo.nextState(_context, page);
       _history.addSnapshot(newContext);
-
       _context = newContext;
+
+    });
+
+    setState(() {
       controller.animateTo(
-        controller.position.maxScrollExtent,
+        controller.position.maxScrollExtent + 200,
         duration: const Duration(milliseconds: 500),
         curve: Curves.fastOutSlowIn,
       );
@@ -62,6 +65,27 @@ class _ReplacementPageInteractive extends State<ReplacementPageInteractive> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> quickPages = [];
+    for (int i = 0; i < 20; i++) {
+      quickPages.add(
+        Container(
+          width: 50,
+          height: 20,
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(3)),
+            border: Border.all(
+              width: 2,
+              color: Colors.black,
+            )
+          ),
+          child: GestureDetector(
+            onTap: () {sendNewPage(i);},
+            child: Text(i.toString()),
+          ),
+        )
+      );
+    }
+
     return Column(
       children: [
         Row(
@@ -133,12 +157,10 @@ class _ReplacementPageInteractive extends State<ReplacementPageInteractive> {
                         scrollDirection: Axis.vertical,
                         child: Row(
                           children: [
-                            const SizedBox(width: 400),
                             ReplacementHistoryGrid(
                               onCellClick: sendNewPage,
                               history: _history
                             ),
-                            const SizedBox(width: 400),
                           ],
                         ),
                       )
@@ -149,24 +171,37 @@ class _ReplacementPageInteractive extends State<ReplacementPageInteractive> {
             ),
           )
         ),
-        DropdownMenu(
-          onSelected: handleDropdownSelected,
-          initialSelection: GlobalState.currentReplacementAlgorithm,
-          dropdownMenuEntries: [
-            ...GlobalState.replacementAlgorithms.indexed.map((entry) {
-              int index = entry.$1;
-              var algoDef = entry.$2;
-              return DropdownMenuEntry(value: index, label: algoDef.$1);
-            })
-          ]
-        ),
-        NumberInput(
-          onChanged: handleNumberInputChange,
-          initialValue: newPage,
-        ),
-        ElevatedButton(
-          onPressed: handleButtonClick,
-          child: const Icon(Icons.pages),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Column(
+              children: [
+                DropdownMenu(
+                  onSelected: handleDropdownSelected,
+                  initialSelection: GlobalState.currentReplacementAlgorithm,
+                  dropdownMenuEntries: [
+                    ...GlobalState.replacementAlgorithms.indexed.map((entry) {
+                      int index = entry.$1;
+                      var algoDef = entry.$2;
+                      return DropdownMenuEntry(value: index, label: algoDef.$1);
+                    })
+                  ]
+                ),
+                NumberInput(
+                  onChanged: handleNumberInputChange,
+                  initialValue: newPage,
+                ),
+                ElevatedButton(
+                  onPressed: handleButtonClick,
+                  child: const Icon(Icons.pages),
+                ),
+              ],
+            ),
+            GridView.count(
+              crossAxisCount: 4,
+              children: quickPages,
+            ),
+          ],
         ),
       ],
     );

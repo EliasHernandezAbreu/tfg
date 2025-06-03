@@ -117,8 +117,20 @@ class _CpuProcessView extends State<CpuProcessView> {
                   ),
                   if (widget.mainElement != CpuProcessViewMainElement.remainingTime) infoRow(
                     Icons.timer,
-                    widget.process.remainingTime.toString(),
-                    "Remaining time",
+                    widget.process.timeToComplete.toString(),
+                    "Time to complete",
+                    false
+                  ),
+                  if (widget.mainElement == CpuProcessViewMainElement.completionTime) infoRow(
+                    Icons.lock_clock,
+                    widget.process.turnAroundTime.toString(),
+                    "Turn around time",
+                    false
+                  ),
+                  if (widget.mainElement == CpuProcessViewMainElement.completionTime) infoRow(
+                    Icons.signal_wifi_bad,
+                    widget.process.waitingTime.toString(),
+                    "Waiting time",
                     false
                   ),
                 ],

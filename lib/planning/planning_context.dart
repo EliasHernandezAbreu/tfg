@@ -4,10 +4,14 @@ class PlanningContext {
   int currentTime = -1;
   int timeSinceLastSwap = 0;
   CpuProcess? currentProcess;
+  bool finished = false;
   List<CpuProcess> pendingEnter = [];
   List<CpuProcess> ready = [];
   List<CpuProcess> waitingIO = [];
   List<CpuProcess> completed = [];
+
+  double averageWaitingTime = 0;
+  double averageTurnAroundTime = 0;
 
   PlanningContext(List<CpuProcess> processes) {
     for (int index = 0; index < processes.length; index++) {
@@ -26,6 +30,9 @@ class PlanningContext {
     currentTime = oldState.currentTime;
     currentProcess = oldState.currentProcess;
     timeSinceLastSwap = oldState.timeSinceLastSwap;
+    finished = oldState.finished;
+    averageWaitingTime = oldState.averageWaitingTime;
+    averageTurnAroundTime = oldState.averageTurnAroundTime;
 
     pendingEnter = List.from(oldState.pendingEnter);
     ready = List.from(oldState.ready);
@@ -52,8 +59,19 @@ class PlanningContext {
     currentProcess?.remainingTime -= 1;
     if (currentProcess!.remainingTime <= 0) {
       currentProcess!.completionTime = currentTime;
+      currentProcess!.turnAroundTime = currentTime - currentProcess!.enterTime;
+      currentProcess!.waitingTime = currentProcess!.turnAroundTime - currentProcess!.timeToComplete;
       completed.add(currentProcess!);
       currentProcess = null;
+    }
+    if (pendingEnter.isEmpty && ready.isEmpty && currentProcess == null) {
+      finished = true;
+      for (CpuProcess process in completed) {
+        averageWaitingTime += process.waitingTime;
+        averageTurnAroundTime += process.turnAroundTime;
+      }
+      averageWaitingTime /= completed.length;
+      averageTurnAroundTime /= completed.length;
     }
   }
 

@@ -3,7 +3,12 @@ import 'package:tfg/planning/planning_page_config.dart';
 import 'package:tfg/planning/planning_page_interactive.dart';
 
 class PlanningPage extends StatefulWidget {
-  const PlanningPage({super.key});
+  final void Function() setHomePage;
+
+  const PlanningPage({
+    super.key,
+    required this.setHomePage,
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -24,17 +29,12 @@ class _PlanningPageState extends State<PlanningPage> {
       currentPage = 1;
     });
   }
-  void setStaticPage() {
-    setState(() {
-      currentPage = 2;
-    });
-  }
 
   Widget decidePageBody() {
     switch (currentPage) {
       case 0: return PlanningPageConfig(
         startInteractiveSimulation: setInteractivePage,
-        startStaticSimulation: setStaticPage,
+        setHomePage: widget.setHomePage,
       );
       case 1: return PlanningPageInteractive(
         backFunction: setConfigPage
