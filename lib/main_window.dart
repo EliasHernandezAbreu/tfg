@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tfg/about_page.dart';
@@ -74,8 +72,8 @@ class _MainWindowState extends State<MainWindow> {
           children: [
             const Text("SimOS"),
             const SizedBox(width: 20),
-            Image.file(
-              File("assets/logo.png"),
+            Image.asset(
+              "assets/logo.png",
               height: 40,
               color: theme.iconTheme.color,
             )
@@ -89,8 +87,8 @@ class _MainWindowState extends State<MainWindow> {
               child: Column(
                 children: [
                   const Text('SimOS'),
-                  Image.file(
-                    File("assets/logo.png"),
+                  Image.asset(
+                    "assets/logo.png",
                     width: 100,
                     color: theme.iconTheme.color,
                   )

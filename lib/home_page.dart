@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -48,8 +46,8 @@ class HomePage extends StatelessWidget {
                 fontSize: 56,
               ),
             ),
-            Image.file(
-              File("assets/logo.png"),
+            Image.asset(
+              "assets/logo.png",
               height: 80,
               color: theme.iconTheme.color,
             ),

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 class AboutPage extends StatelessWidget {
@@ -13,24 +11,20 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
+    bool vertical = MediaQuery.sizeOf(context).width < 700;
 
     return Column(
       children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          IconButton(
-                            onPressed: setHomePage,
-                            icon: const Icon(Icons.arrow_back),
-                          ),
-                          const Text("Back"),
-                        ],
-                      ),
-                    ],
-                  ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            IconButton(
+              onPressed: setHomePage,
+              icon: const Icon(Icons.arrow_back),
+            ),
+            const Text("Back"),
+          ],
+        ),
         Expanded(child: Row(
           children: [
             Expanded(
@@ -38,19 +32,21 @@ class AboutPage extends StatelessWidget {
               child: Container(),
             ),
             Expanded(
-              flex: 3,
+              flex: vertical ? 5 : 3,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Row(
+                  Flex(
+                    direction: vertical ? Axis.vertical : Axis.horizontal,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Image.file(
-                        File("assets/ull.png"),
+                      Image.asset(
+                        "assets/ull.png",
                         height: 40,
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text(
                             "SimOS",
@@ -59,8 +55,8 @@ class AboutPage extends StatelessWidget {
                               fontSize: 56,
                             ),
                           ),
-                          Image.file(
-                            File("assets/logo.png"),
+                          Image.asset(
+                            "assets/logo.png",
                             height: 80,
                             color: theme.iconTheme.color,
                           ),
@@ -75,9 +71,10 @@ class AboutPage extends StatelessWidget {
                       fontSize: 20,
                     ),
                   ),
-                  const Row(
+                  Flex(
+                    direction: vertical ? Axis.vertical : Axis.horizontal,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
+                    children: const [
                       Column(
                         children: [
                           Text("Developer:"),
@@ -85,6 +82,7 @@ class AboutPage extends StatelessWidget {
                           Text("alu0101487137@ull.edu.es"),
                         ],
                       ),
+                      SizedBox(height: 20),
                       Column(
                         children: [
                           Text("Tutorized by:"),

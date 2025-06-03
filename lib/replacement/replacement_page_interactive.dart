@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tfg/custom/number_input.dart';
 import 'package:tfg/global_state.dart';
 import 'package:tfg/replacement/replacement_context.dart';
 import 'package:tfg/replacement/replacement_history.dart';
@@ -37,6 +38,11 @@ class _ReplacementPageInteractive extends State<ReplacementPageInteractive> {
     sendNewPage(newPage);
   }
 
+  void setFrameAmount(int value) {
+    GlobalState.replacementFrameAmount = value;
+    restartSimulation();
+  }
+
   void sendNewPage(int page) {
     setState(() {
       var algo = GlobalState.replacementAlgorithms[GlobalState.currentReplacementAlgorithm].$2;
@@ -64,6 +70,8 @@ class _ReplacementPageInteractive extends State<ReplacementPageInteractive> {
 
   @override
   Widget build(BuildContext context) {
+    bool smallScreen = MediaQuery.sizeOf(context).width < 500;
+
     List<Widget> quickPages = [];
     for (int i = 0; i <= 99; i++) {
       quickPages.add(
@@ -176,16 +184,48 @@ class _ReplacementPageInteractive extends State<ReplacementPageInteractive> {
             ),
           )
         ),
-        DropdownMenu(
-          onSelected: handleDropdownSelected,
-          initialSelection: GlobalState.currentReplacementAlgorithm,
-          dropdownMenuEntries: [
-            ...GlobalState.replacementAlgorithms.indexed.map((entry) {
-              int index = entry.$1;
-              var algoDef = entry.$2;
-              return DropdownMenuEntry(value: index, label: algoDef.$1);
-            })
-          ]
+        Flex(
+          direction: smallScreen ? Axis.vertical : Axis.horizontal,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Algorithm:"),
+                const SizedBox(width: 20),
+                DropdownMenu(
+                  onSelected: handleDropdownSelected,
+                  initialSelection: GlobalState.currentReplacementAlgorithm,
+                  dropdownMenuEntries: [
+                    ...GlobalState.replacementAlgorithms.indexed.map((entry) {
+                      int index = entry.$1;
+                      var algoDef = entry.$2;
+                      return DropdownMenuEntry(value: index, label: algoDef.$1);
+                    })
+                  ]
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Frame amount:"),
+                const SizedBox(width: 20),
+                SizedBox(
+                  width: 100,
+                  child: NumberInput(
+                    initialValue: GlobalState.replacementFrameAmount,
+                    minValue: 1,
+                    maxValue: 50,
+                    onChanged: setFrameAmount,
+                    onSubmit: setFrameAmount,
+                  ),
+                ),
+                const SizedBox(width: 10),
+              ],
+            ),
+          ],
         ),
         const SizedBox(height: 10),
         SizedBox(

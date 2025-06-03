@@ -56,6 +56,9 @@ class _PlanningPageInteractive extends State<PlanningPageInteractive> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.sizeOf(context).width;
+    bool smallScreen = screenWidth < 500;
+
     return Column(
       children: [
         Row(
@@ -92,101 +95,105 @@ class _PlanningPageInteractive extends State<PlanningPageInteractive> {
               borderRadius: const BorderRadius.all(Radius.circular(8)),
               border: Border.all(width: 4, color: Colors.black38),
             ),
-            child: Container(
-              decoration: const BoxDecoration(),
-              clipBehavior: Clip.hardEdge,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Time: ${planningContext.currentTime < 0 ?
-                              "NOT STARTED" : planningContext.finished ?
-                                "FINISHED" : planningContext.currentTime}",
-                            style: const TextStyle(fontWeight: FontWeight.bold) 
-                          ),
-                          Text(
-                            "Time since last swap: ${planningContext.timeSinceLastSwap}",
-                            style: const TextStyle(fontWeight: FontWeight.bold) 
-                          ),
-                        ],
-                      ),
-                      Visibility(
-                        visible: planningContext.finished,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Container(
+                width: screenWidth < 500 ? 400 : screenWidth - 100,
+                decoration: const BoxDecoration(),
+                clipBehavior: Clip.hardEdge,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Average turn around time: ${planningContext.averageTurnAroundTime.toStringAsFixed(2)}",
+                              "Time: ${planningContext.currentTime < 0 ?
+                                "NOT STARTED" : planningContext.finished ?
+                                  "FINISHED" : planningContext.currentTime}",
                               style: const TextStyle(fontWeight: FontWeight.bold) 
                             ),
                             Text(
-                              "Average waiting time: ${planningContext.averageWaitingTime.toStringAsFixed(2)}",
+                              "Time since last swap: ${planningContext.timeSinceLastSwap}",
                               style: const TextStyle(fontWeight: FontWeight.bold) 
                             ),
                           ],
-                        )
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          LabeledColumn(label: "Pending enter", children: [
-                            ...planningContext.pendingEnter.map((p) {
-                              return CpuProcessView(
-                                key: GlobalObjectKey(p.key!),
-                                process: p,
-                                mainElement: CpuProcessViewMainElement.enterTime,
-                              );
-                            })
-                          ]),
-                          LabeledColumn(label: "Ready", children: [
-                            ...planningContext.ready.map((p) {
-                              return CpuProcessView(
-                                key: GlobalObjectKey(p.key!),
-                                process: p,
-                                mainElement: CpuProcessViewMainElement.remainingTime,
-                              );
-                            })
-                          ]),
-                          const SizedBox(width: 5),
-                          LabeledColumn(label: "Executing", children: planningContext.hasCurrentProcess()
-                            ? [
-                                CpuProcessView(
-                                  key: GlobalObjectKey(planningContext.currentProcess!.key!),
-                                  process: planningContext.currentProcess!,
+                        ),
+                        Visibility(
+                          visible: planningContext.finished,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                "Average turn around time: ${planningContext.averageTurnAroundTime.toStringAsFixed(2)}",
+                                style: const TextStyle(fontWeight: FontWeight.bold) 
+                              ),
+                              Text(
+                                "Average waiting time: ${planningContext.averageWaitingTime.toStringAsFixed(2)}",
+                                style: const TextStyle(fontWeight: FontWeight.bold) 
+                              ),
+                            ],
+                          )
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            LabeledColumn(label: "Pending enter", children: [
+                              ...planningContext.pendingEnter.map((p) {
+                                return CpuProcessView(
+                                  key: GlobalObjectKey(p.key!),
+                                  process: p,
+                                  mainElement: CpuProcessViewMainElement.enterTime,
+                                );
+                              })
+                            ]),
+                            LabeledColumn(label: "Ready", children: [
+                              ...planningContext.ready.map((p) {
+                                return CpuProcessView(
+                                  key: GlobalObjectKey(p.key!),
+                                  process: p,
                                   mainElement: CpuProcessViewMainElement.remainingTime,
-                                )
-                              ]
-                            : [],
-                          ),
-                          const SizedBox(width: 5),
-                          LabeledColumn(label: "Completed", children: [
-                            ...planningContext.completed.map((p) {
-                              return CpuProcessView(
-                                key: GlobalObjectKey(p.key!),
-                                process: p,
-                                mainElement: CpuProcessViewMainElement.completionTime,
-                              );
-                            })
-                          ]),
-                        ],
-                      ),
+                                );
+                              })
+                            ]),
+                            const SizedBox(width: 5),
+                            LabeledColumn(label: "Executing", children: planningContext.hasCurrentProcess()
+                              ? [
+                                  CpuProcessView(
+                                    key: GlobalObjectKey(planningContext.currentProcess!.key!),
+                                    process: planningContext.currentProcess!,
+                                    mainElement: CpuProcessViewMainElement.remainingTime,
+                                  )
+                                ]
+                              : [],
+                            ),
+                            const SizedBox(width: 5),
+                            LabeledColumn(label: "Completed", children: [
+                              ...planningContext.completed.map((p) {
+                                return CpuProcessView(
+                                  key: GlobalObjectKey(p.key!),
+                                  process: p,
+                                  mainElement: CpuProcessViewMainElement.completionTime,
+                                );
+                              })
+                            ]),
+                          ],
+                        ),
+                      )
                     )
-                  )
-                ],
-              ),
-            )
+                  ],
+                ),
+              )
+            ),
           ),
         ),
         DropdownMenu(
@@ -208,7 +215,7 @@ class _PlanningPageInteractive extends State<PlanningPageInteractive> {
               child: Container()
             ),
             Expanded(
-              flex: 4,
+              flex: smallScreen ? 16 : 4,
               child: Column(
                 children: [
                   if (GlobalState.currentPlanningAlgorithm == 6) Row(

@@ -4,15 +4,19 @@ import 'package:flutter/services.dart';
 class NumberInput extends StatelessWidget {
   final int initialValue;
   final int minValue;
-  final void Function(int newValue) onChanged;
+  final int? maxValue;
+  final void Function(int newValue)? onChanged;
+  final void Function(int newValue)? onSubmit;
 
   final TextEditingController controller = TextEditingController();
 
   NumberInput({
     super.key,
-    required this.onChanged,
+    this.onChanged,
+    this.onSubmit,
     this.initialValue = 0,
     this.minValue = 0,
+    this.maxValue,
   }) {
     controller.text = initialValue.toString();
     controller.selection = TextSelection.collapsed(offset: controller.text.length);
@@ -38,11 +42,21 @@ class NumberInput extends StatelessWidget {
     }
     if (numValue < minValue) {
       controller.text = minValue.toString();
-      onChanged(minValue);
+      onChanged?.call(minValue);
+      return;
+    }
+    if (maxValue != null && numValue > maxValue!) {
+      controller.text = maxValue.toString();
+      onChanged?.call(maxValue!);
       return;
     }
     controller.text = numValue.toString();
-    onChanged(numValue);
+    onChanged?.call(numValue);
+  }
+
+  void handleSubmit(String value) {
+    int numValue = int.parse(value);
+    onSubmit?.call(numValue);
   }
 
   @override
@@ -53,6 +67,8 @@ class NumberInput extends StatelessWidget {
       keyboardType: TextInputType.number,
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       onChanged: handleChange,
+      onFieldSubmitted: handleSubmit,
+      
       onTap: selectAllText,
     );
   }
