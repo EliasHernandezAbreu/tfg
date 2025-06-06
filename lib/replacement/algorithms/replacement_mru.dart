@@ -10,9 +10,8 @@ class ReplacementMru extends ReplacementAlgorithm {
     int index = newState.checkPage(newPage);
     if (index < 0) {
       int youngestFrame = 0;
-      int youngestFrameAge = 0;
+      int youngestFrameAge = newState.useRecency[youngestFrame];
       for (int i = 0; i < newState.useRecency.length; i++) {
-        if (newState.frames[youngestFrame] == -1) break;
         if (newState.frames[i] == -1) {
           youngestFrame = i;
           break;
