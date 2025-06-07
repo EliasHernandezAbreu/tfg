@@ -208,7 +208,7 @@ class _PlanningPageInteractive extends State<PlanningPageInteractive> {
           ]
         ),
         const SizedBox(height: 20),
-        Row( // 6 is Round Robin index
+        Row(
           children: [
             Expanded(
               flex: 3,
@@ -218,7 +218,7 @@ class _PlanningPageInteractive extends State<PlanningPageInteractive> {
               flex: smallScreen ? 16 : 4,
               child: Column(
                 children: [
-                  if (GlobalState.currentPlanningAlgorithm == 6) Row(
+                  if (GlobalState.currentPlanningAlgorithm == 7) Row( // 7 is Round Robin index
                     children: [
                       const Text("Round Robin time:"),
                       const SizedBox(width: 20),

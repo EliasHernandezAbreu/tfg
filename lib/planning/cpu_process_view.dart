@@ -109,6 +109,12 @@ class _CpuProcessView extends State<CpuProcessView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  infoRow(
+                    Icons.priority_high,
+                    widget.process.priority.toString(),
+                    "Priority",
+                    false
+                  ),
                   if (widget.mainElement != CpuProcessViewMainElement.enterTime) infoRow(
                     Icons.punch_clock,
                     widget.process.enterTime.toString(),

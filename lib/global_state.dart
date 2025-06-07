@@ -18,7 +18,8 @@ abstract class GlobalState {
     ("LJF", PlanningLjf(), "Longest job first"),
     ("SRTF", PlanningSrtf(), "Shortest remaining time first"),
     ("LRTF", PlanningLrtf(), "Longest remaining time first"),
-    ("PRIO", PlanningPrio(), "Priority algorithm"),
+    ("PRIO-P", PlanningPrio(true), "Priority algorithm (preemptive)"),
+    ("PRIO-N", PlanningPrio(false), "Priority algorithm (non-preemptive)"),
     ("RR", PlanningRr(), "Round Robin"),
   ];
   static List<CpuProcess> processes = [CpuProcess(0, 1, 3)]; // List of processes

@@ -176,7 +176,7 @@ class _PlanningPageConfig extends State<PlanningPageConfig> {
           ],
         ),
         const SizedBox(height: 10),
-        if (GlobalState.currentPlanningAlgorithm == 6) Row( // 6 is Round Robin index
+        if (GlobalState.currentPlanningAlgorithm == 7) Row( // 7 is Round Robin index
           children: [
             Expanded(child: Container()),
             const Text("Round Robin time:"),
